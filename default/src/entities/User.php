@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity @ORM\Table(name="user")
  */
-class User {
+class User implements \JsonSerializable {
     /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
     private $id;
 
@@ -14,6 +14,14 @@ class User {
 
     /** @ORM\Column(type="string") **/
     private $pass;
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'pass' => $this->pass,
+        ];
+    }
 
 
     public function __construct(string $email, 
