@@ -1,0 +1,34 @@
+version: "3.4"
+services:
+  nginx:
+    image: nginx
+    volumes: 
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./default:/var/www/default:ro
+    ports:
+      - "8080:8080"
+    links:
+      - php
+      - phpmyadmin
+  php:
+    image: php:7.2-fpm
+    volumes:
+      - ./default:/var/www/default
+    links:
+      - mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "9090:80"
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+    volumes:
+      - ./db:/var/lib/mysql
